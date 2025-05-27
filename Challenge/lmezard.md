@@ -1,31 +1,52 @@
-The home directory of user lmezard contains two files: README and fun.
-File: README
+# Challenge Instructions for User `laurie`
 
-Complete this little challenge and use the result as password for user 'laurie' to login in ssh
+The home directory of user `lmezard` contains two important files: `README` and `fun`.
 
-Step-by-step Instructions
+## 🎯 Objective
 
-    Inspect the fun File
-    Using the file command, we discovered that the fun file is a tar archive:
+Complete this little challenge and use the result as the password for user `laurie` to log in via SSH.
 
+---
+
+## 📁 Step-by-Step Instructions
+
+### 1. Inspect the `fun` File
+
+Run the `file` command to determine the file type:
+
+```bash
 file fun
 # Output: fun: POSIX tar archive (GNU)
+2. Extract the Archive
+Extract the tar archive using:
 
-Extract the Archive
-After extracting it using:
-
+bash
+Copy
+Edit
 tar -xf fun
+This creates a directory named ft_fun containing multiple files with random names ending in .pcap.
 
-a directory named ft_fun is created, which contains multiple files with random names ending in .pcap.
+3. Analyze the Contents
+Each .pcap file contains a fragment of a C source code. A special comment in each file indicates the sequence:
 
-Analyze the Contents
-Each .pcap file contains a fragment of C source code. A special comment line in each file marks the order of the fragments, in the format:
-
+c
+Copy
+Edit
 // fileXX
+Where XX is a number that determines the order of the code fragment.
 
-Reconstruct the Original C Program
-A Python script was used to read all files, identify their sequence from the comment, sort them, and combine the contents into a single file:
+4. Reconstruct the Original C Program
+Use the following Python script to:
 
+Read all .pcap files.
+
+Identify the order from the comment.
+
+Sort and merge them into one C file.
+
+python
+Copy
+Edit
 import os
 import re
 
@@ -52,25 +73,52 @@ with open(os.path.join(folder_path, output_file), 'w') as out_file:
         out_file.write(content + '\n')
 
 print("C source file created as 'merged.c'")
+5. Compile and Run the Program
+Compile the reconstructed C program:
 
-Compile and Run
-Compile the assembled C program:
-
+bash
+Copy
+Edit
 gcc merged.c -o merged
 ./merged
+The program will output a string.
 
-The program outputs a string.
+6. Hash the Output
+Take the output string and hash it using SHA-256:
 
-Hash the Output
-Take the output and apply SHA-256 hashing:
-
+bash
+Copy
+Edit
 echo -n "output_string" | sha256sum
+Replace "output_string" with the actual output from the compiled program.
 
-Replace "output_string" with the actual string printed by the compiled program.
+✅ Final Password
+Use the resulting hash as the password:
 
-Final Password
-The final password obtained after hashing is:
+wasm
+Copy
+Edit
+330b845f32185747e4f8ca15d40ca59796035c89ea809fb5d30f4da83ecf45a4
+🔐 Login via SSH
+Now, log in as user laurie using the obtained password:
 
-    330b845f32185747e4f8ca15d40ca59796035c89ea809fb5d30f4da83ecf45a4
+bash
+Copy
+Edit
+ssh laurie@<host>
+Replace <host> with the actual hostname or IP address.
 
-Use this password to log in as user laurie via SSH.
+yaml
+Copy
+Edit
+
+---
+
+Let me know if you want this converted to a downloadable file or want to include extra details like troubleshooting tips.
+
+
+
+
+
+
+
