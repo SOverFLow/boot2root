@@ -37,7 +37,7 @@ Identify the order from the comment.
 
 Sort and merge them into one C file.
 
-<pre>
+```python
 import os
 import re
 
@@ -64,35 +64,35 @@ with open(os.path.join(folder_path, output_file), 'w') as out_file:
         out_file.write(content + '\n')
 
 print("C source file created as 'merged.c'")
-</pre>
+```
 
 
 ## 5. Compile and Run the Program
 Compile the reconstructed C program:
 
-<pre>
+```bash
 gcc merged.c -o merged
 ./merged
-</pre>
+```
 The program will output a string.
 
 ## 6. Hash the Output
 Take the output string and hash it using SHA-256:
 
-<pre>
+```bash
  echo -n "output_string" | sha256sum 
-</pre>
+```
 
 ✅ Final Password
 Use the resulting hash as the password:
 
-<pre>
+```asm
 330b845f32185747e4f8ca15d40ca59796035c89ea809fb5d30f4da83ecf45a4
-</pre>
+```
 🔐 Login via SSH
 Now, log in as user laurie using the obtained password:
 
-<pre>
+```bash
 ssh laurie@host
-</pre>
+```
 Replace `<host>` with the actual hostname or IP address.

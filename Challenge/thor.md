@@ -6,7 +6,7 @@ In the home directory of user `thor`, there's a file containing drawing instruct
 ## Instructions File
 The file named `turtle` contains movement commands in French:
 
-Avance 1 spaces
+```plaintext Avance 1 spaces
 Tourne droite de 1 degrees
 Avance 1 spaces
 Tourne droite de 1 degrees
@@ -26,11 +26,12 @@ Avance 100 spaces
 Tourne droite de 90 degrees
 Avance 100 spaces
 Recule 200 spaces
+```
 
 
 ## Solution Approach
 
-1. **Recognize the Turtle Connection**: The file name and commands suggest using Python's `turtle` library which can interpret movement commands to draw shapes.
+## 1. **Recognize the Turtle Connection**: The file name and commands suggest using Python's `turtle` library which can interpret movement commands to draw shapes.
 
 2. **Conversion to Python Script**:
    - A C program was created to convert the French instructions into a Python turtle script
@@ -40,7 +41,7 @@ Recule 200 spaces
      - "Tourne droite de X degrees" → `turtle.right(X)`
      - "Tourne gauche de X degrees" → `turtle.left(X)`
 
-3. **Conversion Program**:
+## 3. **Conversion Program**:
 ```c
 #include <stdio.h>
 #include <string.h>
@@ -96,18 +97,22 @@ int main() {
     printf("Python script 'turtle_drawing.py' generated successfully!\n");
     return 0;
 }
+```
 
-    Execution Steps:
+Execution Steps:
 
-        Compile and run the C program to generate turtle_drawing.py
+**Compile and run the C program to generate turtle_drawing.py**
 
-        Execute the Python script: python3 turtle_drawing.py
+**Execute the Python script: python3 turtle_drawing.py**
 
-        The turtle will draw the word "SLASH"
+**The turtle will draw the word "SLASH"**
 
-        Create an MD5 hash of "SLASH": echo -n "SLASH" | md5sum
+**Create an MD5 hash of "SLASH":**
+<pre>echo -n "SLASH" | md5sum </pre>
 
 Final Password
 
 The MD5 hash of "SLASH" is:
+<pre>
 646da671ca01bb5d84dbb5fb2238dc8e
+</pre>
