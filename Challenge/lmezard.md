@@ -6,36 +6,29 @@ The home directory of user `lmezard` contains two important files: `README` and 
 
 Complete this little challenge and use the result as the password for user `laurie` to log in via SSH.
 
----
-
 ## 📁 Step-by-Step Instructions
 
-### 1. Inspect the `fun` File
+## 1. Inspect the `fun` File
 
 Run the `file` command to determine the file type:
 
-```bash
+bash
 file fun
 # Output: fun: POSIX tar archive (GNU)
-2. Extract the Archive
+## 2. Extract the Archive
 Extract the tar archive using:
 
-bash
-Copy
-Edit
+
 tar -xf fun
 This creates a directory named ft_fun containing multiple files with random names ending in .pcap.
 
-3. Analyze the Contents
+## 3. Analyze the Contents
 Each .pcap file contains a fragment of a C source code. A special comment in each file indicates the sequence:
 
-c
-Copy
-Edit
-// fileXX
+fileXX
 Where XX is a number that determines the order of the code fragment.
 
-4. Reconstruct the Original C Program
+## 4. Reconstruct the Original C Program
 Use the following Python script to:
 
 Read all .pcap files.
@@ -44,9 +37,7 @@ Identify the order from the comment.
 
 Sort and merge them into one C file.
 
-python
-Copy
-Edit
+<pre>
 import os
 import re
 
@@ -73,52 +64,35 @@ with open(os.path.join(folder_path, output_file), 'w') as out_file:
         out_file.write(content + '\n')
 
 print("C source file created as 'merged.c'")
-5. Compile and Run the Program
+</pre>
+
+
+## 5. Compile and Run the Program
 Compile the reconstructed C program:
 
-bash
-Copy
-Edit
+<pre>
 gcc merged.c -o merged
 ./merged
+</pre>
 The program will output a string.
 
-6. Hash the Output
+## 6. Hash the Output
 Take the output string and hash it using SHA-256:
 
-bash
-Copy
-Edit
-echo -n "output_string" | sha256sum
-Replace "output_string" with the actual output from the compiled program.
+<pre>
+ echo -n "output_string" | sha256sum 
+</pre>
 
 ✅ Final Password
 Use the resulting hash as the password:
 
-wasm
-Copy
-Edit
+<pre>
 330b845f32185747e4f8ca15d40ca59796035c89ea809fb5d30f4da83ecf45a4
+</pre>
 🔐 Login via SSH
 Now, log in as user laurie using the obtained password:
 
-bash
-Copy
-Edit
-ssh laurie@<host>
-Replace <host> with the actual hostname or IP address.
-
-yaml
-Copy
-Edit
-
----
-
-Let me know if you want this converted to a downloadable file or want to include extra details like troubleshooting tips.
-
-
-
-
-
-
-
+<pre>
+ssh laurie@host
+</pre>
+Replace `<host>` with the actual hostname or IP address.
