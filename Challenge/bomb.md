@@ -1,8 +1,8 @@
 #  Bomb Challenge Write-up
 
-Introduction
+## Introduction
 
-The bomb challenge consists of six phases. Each phase requires providing the correct input to prevent the bomb from “exploding.” If the input is wrong, the explode_bomb() function is called, terminating the program (or triggering a simulated explosion). Let’s break down the first three phases.
+The bomb challenge consists of six phases. Each phase requires providing the correct input to prevent the bomb from `“exploding.”` If the input is wrong, the `explode_bomb()` function is called, terminating the program (or triggering a simulated explosion). Let’s break down the first three phases.
 
 ## Phase 1
 
@@ -22,7 +22,7 @@ int __cdecl phase_1(_BYTE *a1)
 
 **Analysis & Solution:**
 
-- The input string a1 is compared to "Public speaking is very easy." using the strings_not_equal function.
+- The input string a1 is compared to `"Public speaking is very easy."` using the strings_not_equal function.
 
  - If the strings don’t match, the bomb explodes.
 
@@ -69,27 +69,27 @@ int __cdecl phase_2(char *s)
 
 - The function read_six_numbers expects six integers separated by spaces.
 
-- The first number must be 1.
+- The first number must be `1`.
 
 - Each subsequent number is calculated as the previous number multiplied by the index (starting from 2).
 
 Let’s compute the correct sequence step-by-step:
 
-1. v3[0] = 1
+1. **v3[0] = `1`**
 
-2. v3[1] = 1 * 2 = 2
+2. **v3[1] = `1 * 2 = 2`**
 
-3. v3[2] = 2 * 3 = 6
+3. **v3[2] = `2 * 3 = 6`**
 
-4. v3[3] = 6 * 4 = 24
+4. **v3[3] = `6 * 4 = 24`**
 
-5. v3[4] = 24 * 5 = 120
+5. **v3[4] = `24 * 5 = 120`**
 
-6. v3[5] = 120 * 6 = 720
+6. **v3[5] = `120 * 6 = 720`**
 
 Correct input for phase 2:
 
-```
+```c
 1 2 6 24 120 720
 ```
 
@@ -161,9 +161,9 @@ int __cdecl phase_3(char *s)
 ```
 **Analysis & Solution:**
 
-- The input format is: <number> <char> <number> (e.g., 0 q 777).
+- The input format is: `<number> <char> <number>` (e.g., 0 q 777).
 
-- The first number (v3) determines the case (0–7).
+- The first number (v3) determines the case `(0–7)`.
 
 - Each case defines:
 
@@ -171,29 +171,29 @@ int __cdecl phase_3(char *s)
 
     - A target character (v2) that must match the middle character (v4).
 
-- The target characters are defined as ASCII values in decimal:
+- The target characters are defined as `ASCII` values in decimal:
 
-    - 113 = q
+    - `113 = q`
 
-    - 98 = b
+    - `98 = b`
 
-    - 107 = k
+    - `107 = k`
 
-    - 111 = o
+    - `111 = o`
 
-    - 116 = t
+    - `116 = t`
 
-    - 118 = v
+    - `118 = v`
 
 Example for case 0:
 
-    - v3 = 0
+  -  `v3 = 0`
 
-    - v2 = 113 (q)
+  - `v2 = 113 (q)`
 
-    - v5 = 777
+  - `v5 = 777`
 
-    - v4 = q
+  - `v4 = q`
     
 **Here’s the table for all cases:**
 
@@ -211,7 +211,7 @@ Example for case 0:
 
 **Correct input for phase 2:**
 
-```
+```c
 1 b 214
 ```
 
@@ -246,37 +246,37 @@ int __cdecl phase_4(char *s)
 
 - It calls func4 with that integer as an argument.
 
-- func4 is a classic Fibonacci sequence function:
+- func4 is a classic `Fibonacci` sequence function:
 
-  - For a1 <= 1, it returns 1.
+  - For `a1 <= 1`, it returns 1.
 
   - Otherwise, it returns the sum of the two preceding numbers.
 
-- phase_4 expects the output of func4 to be 55. So we need to find an input number n such that the n-th Fibonacci number equals 55.
+- phase_4 expects the output of func4 to be `55`. So we need to find an input number `n` such that the `n-th Fibonacci number equals 55`.
 
 Let’s compute the sequence:
 
-1.  F(0) = 1
+1. `` F(0) = 1``
 
-2. F(1) = 1
+2. `F(1) = 1`
 
-3. F(2) = 2
+3. `F(2) = 2`
 
-4. F(3) = 3
+4. `F(3) = 3`
 
-5. F(4) = 5
+5. `F(4) = 5`
 
-6. F(5) = 8
+6. `F(5) = 8`
 
-7. F(6) = 13
+7. `F(6) = 13`
 
-8. F(7) = 21
+8. `F(7) = 21`
 
-9. F(8) = 34
+9. `F(8) = 34`
 
-10. F(9) = 55
+10. `F(9) = 55`
 
-The correct input is 9.
+The correct input is `9`.
 
 Correct input for phase 4:
 
@@ -311,11 +311,11 @@ _BYTE array_123[16] = { 105, 115, 114, 118, 101, 97, 119, 104, 111, 98, 112, 110
 ```
 **Analysis & Solution:**
 
-1. Input must be 6 characters long (string_length(a1) == 6).
+1. Input must be 6 characters long `(string_length(a1) == 6)`.
 
-2. For each character in the input, we mask it with 0xF (i.e., take the last 4 bits) and use it as an index into array_123.
+2. For each character in the input, we mask it with `0xF` (i.e., take the last `4 bits`) and use it as an index into `array_123`.
 
-3. The result must be the string "giants".
+3. The result must be the string `"giants"`.
 
 So the program does:
 
@@ -348,19 +348,18 @@ array_123 value: 105 115 114 118 101 97 119 104 111 98  112 110 117 116 102 103
 char:             i   s   r   v   e  a   w   h   o   b   p   n   u   t   f   g
 ```
 
-Target indices for "giants":
+Target indices for `"giants"`:
 
-perl
-Copy
-Edit
+```c
 'g' → index 15  (a1[0] & 0xF = 15)
 'i' → index 0   (a1[1] & 0xF = 0)
 'a' → index 5   (a1[2] & 0xF = 5)
 'n' → index 11  (a1[3] & 0xF = 11)
 't' → index 13  (a1[4] & 0xF = 13)
 's' → index 1   (a1[5] & 0xF = 1)
+```
 
-We choose **printable ASCII** characters whose last 4 bits match:
+We choose **printable ASCII** characters whose last `4 bits` match:
 
 | Needed index | Example printable character |
 | ------------ | --------------------------- |
@@ -445,9 +444,9 @@ This phase uses a linked list of 6 nodes (node1…node6), each containing a valu
 
 1. **Input parsing**:
 
-    - Reads 6 numbers into v14[].
+    - Reads 6 numbers into `v14[]`.
 
-    - Each must be in the range 1..6 (validated by if ( (unsigned int)(v14[i] - 1) > 5 )).
+    - Each must be in the range `1..6` (validated by if ( `(unsigned int)(v14[i] - 1) > 5 )`).
 
     - Must be unique (checked by nested loop).
 
@@ -467,15 +466,16 @@ This converts each input number to a pointer to the corresponding linked list no
 3. **Rebuilding the list:**
 
     - Links nodes in the order of input:
-  ```c
+
+```c
   for ( n = 1; n <= 5; ++n )
   {
     v8 = v13[n];
     *(_DWORD *)(v6 + 8) = v8;
     v6 = v8;
   }
-  ```
-    - Ends the list with NULL.
+```
+   - Ends the list with `NULL`.
 
 4. **Final check:**
 
@@ -509,8 +509,8 @@ for ( ii = 0; ii <= 4; ++ii )
   Node 5: 372
   Node 6: 111
   ```
-The descending order of values: 888, 748, 484, 372, 219, 111.
-Map back to their **indices** in the original linked list: 3, 4, 1, 5, 2, 6.
+The descending order of values: `888, 748, 484, 372, 219, 111.`
+Map back to their **indices** in the original linked list: `3, 4, 1, 5, 2, 6.`
 
 -**Final input:**
 
