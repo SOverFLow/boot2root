@@ -33,6 +33,7 @@ Public speaking is very easy.
 ```
 
 ## Phase 2
+
 **Source code:**
 
 ```c
@@ -159,6 +160,7 @@ int __cdecl phase_3(char *s)
   return result;
 }
 ```
+
 **Analysis & Solution:**
 
 - The input format is: `<number> <char> <number>` (e.g., 0 q 777).
@@ -216,6 +218,7 @@ Example for case 0:
 ```
 
 ## Phase 4
+
 **Source code:**
 
 ```C
@@ -285,6 +288,7 @@ Correct input for phase 4:
 ```
 
 ## Phase 5
+
 **Source code:**
 
 ```c
@@ -305,10 +309,13 @@ int __cdecl phase_5(_BYTE *a1)
   return result;
 }
 ```
+
 **Supporting data:**
+
 ```bash
 _BYTE array_123[16] = { 105, 115, 114, 118, 101, 97, 119, 104, 111, 98, 112, 110, 117, 116, 102, 103 }; // corresponds to: "isrveawhobpnutfg"
 ```
+
 **Analysis & Solution:**
 
 1. Input must be 6 characters long `(string_length(a1) == 6)`.
@@ -378,6 +385,7 @@ opukmq
 ```
 
 ## Phase 6
+
 **Source code:**
 
 ```c

