@@ -510,18 +510,35 @@ for ( ii = 0; ii <= 4; ++ii )
     - For example, if the original node values (in linked list order) are:
 
   ```yaml
-  Node 1: 484
-  Node 2: 219
-  Node 3: 888
-  Node 4: 748
-  Node 5: 372
-  Node 6: 111
+  (gdb) p node1
+  $1 = 253
+  (gdb) p node2
+  $2 = 725
+  (gdb) p node3
+  $3 = 301
+  (gdb) p node4
+  $4 = 997
+  (gdb) p node5
+  $5 = 212
+  (gdb) p node6
+  $6 = 432
   ```
-The descending order of values: `888, 748, 484, 372, 219, 111.`
-Map back to their **indices** in the original linked list: `3, 4, 1, 5, 2, 6.`
+The descending order of values: `997, 725, 432, 301, 253, 212.`
+Map back to their **indices** in the original linked list: `4, 2, 6, 3, 1, 5.`
 
 -**Final input:**
 
 ```c
-3 4 1 5 2 6
+4 2 6 3 1 5
 ```
+> **For the final password, note that you need to swap the 3 and 1 digits in the sequence you just found.
+So if your ordered index sequence is 123456, you actually need to enter 123546 instead.**
+
+
+### Putting it all together
+
+The final `password` to connect to `thor` is:
+```c
+Publicspeakingisveryeasy.126241207201b2149opekmq426135
+```
+
